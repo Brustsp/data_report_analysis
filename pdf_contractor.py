@@ -1,56 +1,38 @@
-def draw_md(data_set, fig_path):
-    ax = sns.boxplot(x="N", y="MD", data=data_set, whis=np.inf)
-    ax = sns.stripplot(x="N", y="MD", jitter=0.2, data=data_set, color=".3")
-    plt.ylim(200, 340)
-    plt.grid(axis="y")
-    plt.savefig(os.path.join(fig_path, 'MD.png'))
-    #plt.show()
+import os
+import pdfplumber
+import pandas as pd
+
+path_report = r'C:\Yukang\Study\python\PycharmProjects\pdf_report_analysis\report'
+path_csv = r'C:\Yukang\Study\python\PycharmProjects\pdf_report_analysis\csv'
+
+path_report_M254 = os.path.join(path_report, 'M254_OT')
+path_report_M264 = os.path.join(path_report, 'M264_E15_140')
+
+path_csv_M254 = os.path.join(path_csv, 'M254_csv')
+path_csv_M264 = os.path.join(path_csv, 'M264_csv')
+
+# """### M254 ###"""
+# for i, file in enumerate(os.listdir(path_report_M254)):
+#     label = file[-6:-4]
+#
+#     with pdfplumber.open(os.path.join(path_report_M254, file)) as pdf:
+#         page = pdf.pages[0]
+#         table = page.extract_table()
+#
+#         df = pd.DataFrame(table)
+#
+#         df.to_csv(os.path.join(path_csv_M254, label + '.csv'), index=False, header=False, columns=[1, 2, 3],
+#                   encoding='gbk')
 
 
-def draw_p(data_set, fig_path):
-    ax = sns.boxplot(x="N", y="P", data=data_set, whis=np.inf)
-    ax = sns.stripplot(x="N", y="P", jitter=0.2, data=data_set, color=".3")
-    plt.ylim(100, 180)
-    #plt.grid(axis="y")
-    plt.savefig(os.path.join(fig_path, 'P.png'))
-    #plt.show()
+"""### M264 ###"""
+for i, file in enumerate(os.listdir(path_report_M264)):
+    label = file[-10:-4]
 
+    with pdfplumber.open(os.path.join(path_report_M264, file)) as pdf:
+        page = pdf.pages[0]
+        table = page.extract_table()
 
-def draw_mip2i(data_set, fig_path):
-    ax = sns.boxplot(x="N", y="MIP2I", data=data_set, whis=np.inf)
-    ax = sns.stripplot(x="N", y="MIP2I", jitter=0.2, data=data_set, color=".3")
-    plt.ylim(2000, 2600)
-    #plt.grid(axis="y")
-    plt.savefig(os.path.join(fig_path, 'MIP2I.png'))
+        df = pd.DataFrame(table)
 
-
-def draw_poeln(data_set, fig_path):
-    ax = sns.boxplot(x="N", y="POELN", data=data_set, whis=np.inf)
-    ax = sns.stripplot(x="N", y="POELN", jitter=0.2, data=data_set, color=".3")
-    plt.ylim(1, 7)
-    #plt.grid(axis="y")
-    plt.savefig(os.path.join(fig_path, 'POELN.png'))
-
-
-def draw_mipcri(data_set, fig_path):
-    ax = sns.boxplot(x="N", y="MIPCRI", data=data_set, whis=np.inf)
-    ax = sns.stripplot(x="N", y="MIPCRI", jitter=0.2, data=data_set, color=".3")
-    plt.ylim(34, 36)
-    #plt.grid(axis="y")
-    plt.savefig(os.path.join(fig_path, 'MIPCRI.png'))
-
-
-def draw_pkgh(data_set, fig_path):
-    ax = sns.boxplot(x="N", y="PKGH", data=data_set, whis=np.inf)
-    ax = sns.stripplot(x="N", y="PKGH", jitter=0.2, data=data_set, color=".3")
-    plt.ylim(-100, 50)
-    plt.grid(axis="y")
-    plt.savefig(os.path.join(fig_path, 'PKGH.png'))
-
-
-def draw_tabg1r(data_set, fig_path):
-    ax = sns.boxplot(x="N", y="TABG1R", data=data_set, whis=np.inf)
-    ax = sns.stripplot(x="N", y="TABG1R", jitter=0.2, data=data_set, color=".3")
-    # plt.ylim(500, 1000)
-    #plt.grid(axis="y")
-    plt.savefig(os.path.join(fig_path, 'TABG1R.png'))
+        df.to_csv(os.path.join(path_csv_M264, label + '.csv'), index=False, header=False, columns=[1, 2, 3], encoding='gbk')
