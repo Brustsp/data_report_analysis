@@ -45,10 +45,11 @@ def data_channels(data):
     df[0] = 'HT1'
     df[1] = 'HT2'
     df[2] = 'HT3'
+
     return df
 
 
-def flatten_df(df, column_name):
+def flatten_df(df, column_name, path):
     """
     set the same channel in one column
     :return:
@@ -59,6 +60,18 @@ def flatten_df(df, column_name):
         flatt_df[column_name[i]] = np.array([df[3 * i].values,
                                              df[3 * i + 1].values, df[3 * i + 2].values]).flatten()
 
+    ### add data and engine number info
+    date = []
+    engine_no = []
+    file_dir = os.listdir(path)
+    for file in file_dir:
+        date_file = file.split('_')[0]
+        engine_no_file = file.split('_')[-1].split('.')[0]
+        date.append(date_file)
+        engine_no.append(engine_no_file)
+
+    flatt_df['Date'] = np.array([date, date, date]).flatten()
+    flatt_df['Engine_No'] = np.array([engine_no, engine_no, engine_no]).flatten()
     return flatt_df
 
 
@@ -137,13 +150,14 @@ df_M264 = data_channels(data_M264)
 column_name = ['N', 'MD', 'P', 'MIP2I', 'MITL', 'MITW', 'MITOEL',
                'POELN', 'OELSTS', 'MIPCRI', 'PKGH', 'TABG1R']
 
-flatt_df_M254 = flatten_df(df_M254, column_name)
+flatt_df_M254 = flatten_df(df_M254, column_name, csv_M254)
 flatt_df_M254['type'] = 'M254'
 
 flatt_df_M264 = flatten_df(df_M264, column_name)
 flatt_df_M264['type'] = 'M264'
 
 flatt_df = pd.concat([flatt_df_M254, flatt_df_M264], ignore_index=True)
+
 
 #draw_md(flatt_df)
 #draw_p(flatt_df)
@@ -161,4 +175,5 @@ flatt_df = pd.concat([flatt_df_M254, flatt_df_M264], ignore_index=True)
 # plt.plot(flatt_df_M264.MITL[np.argwhere(flatt_df_M264.MITL.values < 40).squeeze()])
 # plt.show()
 
-print(flatt_df_M264.MITL[(flatt_df_M264['MITL'] < 40) & (flatt_df_M264['N'] == 'HT2')])
+#print(flatt_df_M254[['Date', 'Engine_No', 'MITL']][(flatt_df_M254['MITL'] < 50) & (flatt_df_M254['N'] == 'HT2')])
+
